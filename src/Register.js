@@ -73,8 +73,8 @@ function Register() {
             role="alert"
           >
             <div className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
-              <p>Sorry</p>
-              <p>{errorMessage}</p>
+              <p className="text-3xl font-extrabold">Sorry</p>
+              <p className="break-all">{errorMessage}</p>
             </div>
             <button
               type="button"
