@@ -3,6 +3,7 @@ import { auth } from "./firebase-config";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
+import validator from "validator";
 import logo from "./assets/logo.jpg";
 import cover from "./assets/cover.jpg";
 
@@ -25,19 +26,34 @@ function Login() {
 
   const handleSignin = () => {
     try {
-      setButtonState(true);
-      signInWithEmailAndPassword(auth, email, password);
+      if (email && password && validator.isEmail(email)) {
+        if (password.length < 8) {
+          setErrorMessage("Password Should be Greater than 8 Characters");
+          setShowAlert(true);
+          return;
+        }
+        setButtonState(true);
+        signInWithEmailAndPassword(auth, email, password).catch((error) => {
+          setErrorMessage(error.message);
+          setShowAlert(true);
+          setButtonState(false);
+        });
+      } else {
+        setErrorMessage("Please Enter Valid Credientials and Try Again");
+        setShowAlert(true);
+        return;
+      }
     } catch (error) {
       setButtonState(false);
       setErrorMessage(error.message);
-      alert(error.message);
+      setShowAlert(true);
     }
   };
 
   return (
     <>
       <div className="flex items-center min-h-screen bg-gray-50">
-        {/* {showAlert && (
+        {showAlert && (
           <div
             id="alert-5"
             className="flex p-4 bg-gray-100 rounded-lg dark:bg-gray-700"
@@ -49,6 +65,7 @@ function Login() {
             </div>
             <button
               type="button"
+              onClick={() => setShowAlert(false)}
               className="ml-auto -mx-1.5 -my-1.5 bg-gray-100 text-gray-500 rounded-lg focus:ring-2 focus:ring-gray-400 p-1.5 hover:bg-gray-200 inline-flex h-8 w-8 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
               data-dismiss-target="#alert-5"
               aria-label="Close"
@@ -69,7 +86,7 @@ function Login() {
               </svg>
             </button>
           </div>
-        )} */}
+        )}
 
         <div className="flex h-full max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
           <div className="flex flex-col-reverse md:flex-row">
@@ -87,6 +104,7 @@ function Login() {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
                 <input
                   className="w-full mt-5 px-4 py-2 text-sm border rounded-md focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-600"
@@ -94,6 +112,7 @@ function Login() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
                 <button
                   disabled={buttonState}
