@@ -69,10 +69,10 @@ function Register() {
         {showAlert && (
           <div
             id="alert-5"
-            className="flex p-4 bg-gray-100 rounded-lg text-center dark:bg-gray-700"
+            className="flex h-42 w-52 p-4 bg-gray-100 rounded-lg text-center dark:bg-gray-700 top-50 left-20 align-middle absolute z-50"
             role="alert"
           >
-            <div className="w-32 h-32 ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
+            <div className="w-auto h-auto ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">
               <p className="text-3xl font-extrabold">Sorry</p>
               <p className="break-all">{errorMessage}</p>
             </div>
